@@ -6,8 +6,22 @@ param(
     [string]$OutputDir = (Get-Location).Path,
     [switch]$Recurse,
     [switch]$AutoText,
-    [string[]]$Extensions = @(".txt", ".md", ".json", ".jsonl", ".html", ".htm", ".py", ".ps1", ".log"),
-    [string[]]$ExcludeDirs = @(".git", "out", "temp"),
+    [string[]]$Extensions = @(
+        ".txt", ".md", ".markdown",
+        ".json", ".jsonl", ".yaml", ".yml", ".toml", ".xml",
+        ".html", ".htm", ".css", ".scss",
+        ".js", ".jsx", ".ts", ".tsx",
+        ".py", ".ps1", ".sh", ".bash", ".zsh",
+        ".sql", ".csv", ".tsv", ".log",
+        ".env", ".ini", ".cfg", ".conf",
+        ".gitignore", ".dockerignore"
+    ),
+    [string[]]$ExcludeDirs = @(
+        ".git", "out", "temp",
+        "node_modules", "dist", "build", "target",
+        ".venv", "venv", "__pycache__", ".cache",
+        ".next", ".nuxt", "coverage"
+    ),
     [string]$Delimiter = "==========",
     [string]$Prefix = "txtconcat",
     [Alias("x")]
@@ -210,7 +224,8 @@ function Get-SourceFiles {
             if (Test-IsUnderExcludedDirectory -Path $_.FullName -DirectoryNames $ExcludedDirectoryNames) { return $false }
             if ($SkipGenerated -and (Test-IsGeneratedConcatFile -Path $_.FullName -GeneratedPrefix $GeneratedPrefix)) { return $false }
             if ($UseAutoText) { return (Test-IsTextFile -Path $_.FullName) }
-            return ($AllowedExtensions -contains $_.Extension.ToLowerInvariant())
+            return ($AllowedExtensions -contains $_.Name.ToLowerInvariant()) -or
+                ($AllowedExtensions -contains $_.Extension.ToLowerInvariant())
         } |
         Sort-Object FullName -Unique
 }
