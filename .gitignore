@@ -1,0 +1,9 @@
+out/
+temp/
+legacy/deleteme/
+
+txtconcat_*.txt
+txtconcat_*_list.txt
+
+*.lnk
+*.url
