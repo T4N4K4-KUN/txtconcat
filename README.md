@@ -66,8 +66,8 @@ pwsh ./txtconcat.ps1 -AutoText
 | `-OutputDir` | current directory | Specifies the output directory. |
 | `-Recurse` | off | Includes subdirectories. |
 | `-AutoText` | off | Detects text files by content instead of extension. |
-| `-Extensions` | `.txt,.md,.json,.jsonl,.html,.htm,.py,.ps1,.log` | Target extensions when `-AutoText` is not used. |
-| `-ExcludeDirs` | `.git,out,temp` | Directory names to exclude, especially when using `-Recurse`. |
+| `-Extensions` | see File Selection | Target extensions or exact file names when `-AutoText` is not used. |
+| `-ExcludeDirs` | see File Selection | Directory names to exclude, especially when using `-Recurse`. |
 | `-Delimiter` | `==========` | Separator text between files. |
 | `-Prefix` | `txtconcat` | Prefix for generated output file names. |
 | `-ExcludeGeneratedFiles` | `$true` | Excludes `txtconcat_*.txt` and `txtconcat_*_list.txt` from input. |
@@ -81,14 +81,40 @@ The default target extensions are:
 ```text
 .txt
 .md
+.markdown
 .json
 .jsonl
+.yaml
+.yml
+.toml
+.xml
 .html
 .htm
+.css
+.scss
+.js
+.jsx
+.ts
+.tsx
 .py
 .ps1
+.sh
+.bash
+.zsh
+.sql
+.csv
+.tsv
 .log
+.env
+.ini
+.cfg
+.conf
+.gitignore
+.dockerignore
 ```
+
+The default extension list is intentionally broad for source code, configuration, documents, and logs.
+Use `-AutoText` when you want to include any file that looks like text regardless of extension.
 
 When `-AutoText` is specified, files are checked by content instead of extension.
 The script reads up to the first 8192 bytes and uses these rules:
@@ -99,7 +125,24 @@ The script reads up to the first 8192 bytes and uses these rules:
 - Files with less than 30% control characters are treated as text.
 
 By default, generated `txtconcat_*.txt` and `txtconcat_*_list.txt` files are excluded from input.
-Directories named `.git`, `out`, and `temp` are also excluded, especially when using `-Recurse`.
+These directories are also excluded by default, especially when using `-Recurse`:
+
+```text
+.git
+out
+temp
+node_modules
+dist
+build
+target
+.venv
+venv
+__pycache__
+.cache
+.next
+.nuxt
+coverage
+```
 
 ## Output
 
@@ -193,8 +236,8 @@ pwsh ./txtconcat.ps1 -AutoText
 | `-OutputDir` | current directory | 出力先フォルダを指定します。 |
 | `-Recurse` | off | サブフォルダを含めます。 |
 | `-AutoText` | off | 拡張子ではなく内容からテキストファイルを判定します。 |
-| `-Extensions` | `.txt,.md,.json,.jsonl,.html,.htm,.py,.ps1,.log` | `-AutoText` 未指定時の対象拡張子です。 |
-| `-ExcludeDirs` | `.git,out,temp` | `-Recurse` 時などに除外するディレクトリ名です。 |
+| `-Extensions` | 対象ファイルの選び方を参照 | `-AutoText` 未指定時の対象拡張子または完全一致ファイル名です。 |
+| `-ExcludeDirs` | 対象ファイルの選び方を参照 | `-Recurse` 時などに除外するディレクトリ名です。 |
 | `-Delimiter` | `==========` | ファイル境界の区切り文字です。 |
 | `-Prefix` | `txtconcat` | 出力ファイル名の接頭辞です。 |
 | `-ExcludeGeneratedFiles` | `$true` | `txtconcat_*.txt` と `txtconcat_*_list.txt` を入力対象から除外します。 |
@@ -208,14 +251,40 @@ pwsh ./txtconcat.ps1 -AutoText
 ```text
 .txt
 .md
+.markdown
 .json
 .jsonl
+.yaml
+.yml
+.toml
+.xml
 .html
 .htm
+.css
+.scss
+.js
+.jsx
+.ts
+.tsx
 .py
 .ps1
+.sh
+.bash
+.zsh
+.sql
+.csv
+.tsv
 .log
+.env
+.ini
+.cfg
+.conf
+.gitignore
+.dockerignore
 ```
+
+既定の対象は、ソースコード、設定、ドキュメント、ログを広めに拾う方針です。
+拡張子に関係なくテキストらしいファイルを拾いたい場合は `-AutoText` を使います。
 
 `-AutoText` を指定した場合は、拡張子ではなくファイル内容からテキストファイルかどうかを判定します。
 先頭最大8192バイトを読み、次の条件で判定します。
@@ -226,7 +295,24 @@ pwsh ./txtconcat.ps1 -AutoText
 - 制御文字の割合が30%未満ならテキスト扱い
 
 既定では、生成済みの `txtconcat_*.txt` と `txtconcat_*_list.txt` は入力対象から除外します。
-また、`-Recurse` 時などは `.git`, `out`, `temp` ディレクトリを除外します。
+また、`-Recurse` 時などは次のディレクトリを既定で除外します。
+
+```text
+.git
+out
+temp
+node_modules
+dist
+build
+target
+.venv
+venv
+__pycache__
+.cache
+.next
+.nuxt
+coverage
+```
 
 ## 出力
 
