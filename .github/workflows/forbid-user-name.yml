@@ -1,0 +1,45 @@
+name: Forbid USER_NAME in Text Files
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  check-user-name-secret:
+    name: Check USER_NAME secret in tracked text files
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fail if USER_NAME appears in tracked text files
+        shell: bash
+        env:
+          USER_NAME_SECRET: ${{ secrets.USER_NAME }}
+        run: |
+          set -euo pipefail
+
+          if [[ -z "${USER_NAME_SECRET:-}" ]]; then
+            echo "::error::Secret USER_NAME is not configured."
+            exit 1
+          fi
+
+          found=0
+          while IFS= read -r -d '' file; do
+            # Skip binary files; check only plain text-like files.
+            if ! grep -Iq . "$file"; then
+              continue
+            fi
+            if grep -Fq -- "$USER_NAME_SECRET" "$file"; then
+              echo "::error file=$file::Forbidden value detected in text file."
+              found=1
+            fi
+          done < <(git ls-files -z)
+
+          if [[ "$found" -ne 0 ]]; then
+            exit 1
+          fi
