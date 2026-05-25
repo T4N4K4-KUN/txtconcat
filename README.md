@@ -1,77 +1,72 @@
 # txtconcat
 
-A PowerShell script that concatenates text files in selected directories into a single text file.
-It targets PowerShell 7 (`pwsh`) so it can run on both Windows and macOS.
+A small macOS-friendly shell script that concatenates text files in selected
+directories into a single text file.
 
 ## Requirements
 
-- PowerShell 7+
-
-On macOS, you can install it with Homebrew.
-
-```sh
-brew install powershell
-```
+- macOS `/bin/sh`
+- Standard macOS command-line tools (`find`, `sort`, `grep`, `cat`, `awk`)
 
 ## Usage
 
 Concatenate matching files in the current directory.
 
 ```sh
-pwsh ./txtconcat.ps1
+./txtconcat.sh
 ```
 
 Include subdirectories.
 
 ```sh
-pwsh ./txtconcat.ps1 -Recurse
+./txtconcat.sh --recurse
 ```
 
 Specify one source directory.
 
 ```sh
-pwsh ./txtconcat.ps1 -SourceDir ./src
+./txtconcat.sh --source-dir ./src
 ```
 
 Specify multiple source directories.
 
 ```sh
-pwsh ./txtconcat.ps1 -SourceDirs ./src,./docs
+./txtconcat.sh --source-dirs ./src,./docs
 ```
 
 Specify an output directory.
 
 ```sh
-pwsh ./txtconcat.ps1 -OutputDir ./out
+./txtconcat.sh --output-dir ./out
 ```
 
 Specify target extensions.
 
 ```sh
-pwsh ./txtconcat.ps1 -Extensions .txt,.md,.py
+./txtconcat.sh --extensions .txt,.md,.py
 ```
 
 Detect text files by file content instead of extension.
 
 ```sh
-pwsh ./txtconcat.ps1 -AutoText
+./txtconcat.sh --auto-text
 ```
 
 ## Options
 
 | Option | Default | Description |
 | --- | --- | --- |
-| `-SourceDir` | current directory | Specifies one input directory. |
-| `-SourceDirs` | current directory | Specifies multiple input directories. Cannot be used with `-SourceDir`. |
-| `-OutputDir` | current directory | Specifies the output directory. |
-| `-Recurse` | off | Includes subdirectories. |
-| `-AutoText` | off | Detects text files by content instead of extension. |
-| `-Extensions` | see File Selection | Target extensions or exact file names when `-AutoText` is not used. |
-| `-ExcludeDirs` | see File Selection | Directory names to exclude, especially when using `-Recurse`. |
-| `-Delimiter` | `==========` | Separator text between files. |
-| `-Prefix` | `txtconcat` | Prefix for generated output file names. |
-| `-ExcludeGeneratedFiles` | `$true` | Excludes `txtconcat_*.txt` and `txtconcat_*_list.txt` from input. |
-| `-UseHomePlaceholder` | `$true` | Replaces paths under the home directory with `~`. |
+| `--source-dir` | current directory | Specifies one input directory. |
+| `--source-dirs` | current directory | Specifies multiple input directories. Cannot be used with `--source-dir`. |
+| `--output-dir` | current directory | Specifies the output directory. |
+| `--recurse` | off | Includes subdirectories. |
+| `--auto-text` | off | Detects text files by content instead of extension. |
+| `--extensions` | see File Selection | Target extensions or exact file names when `--auto-text` is not used. |
+| `--exclude-dirs` | see File Selection | Directory names to exclude, especially when using `--recurse`. |
+| `--delimiter` | `==========` | Separator text between files. |
+| `--prefix` | `txtconcat` | Prefix for generated output file names. |
+| `--include-generated-files` | off | Includes generated output files that would otherwise be skipped. |
+| `--no-home-placeholder` | off | Keeps absolute home paths instead of replacing them with `~`. |
 
 ## File Selection
 
@@ -114,9 +109,9 @@ The default target extensions are:
 ```
 
 The default extension list is intentionally broad for source code, configuration, documents, and logs.
-Use `-AutoText` when you want to include any file that looks like text regardless of extension.
+Use `--auto-text` when you want to include any file that looks like text regardless of extension.
 
-When `-AutoText` is specified, files are checked by content instead of extension.
+When `--auto-text` is specified, files are checked by content instead of extension.
 The script reads up to the first 8192 bytes and uses these rules:
 
 - Empty files are treated as text.
@@ -125,7 +120,7 @@ The script reads up to the first 8192 bytes and uses these rules:
 - Files with less than 30% control characters are treated as text.
 
 By default, generated `txtconcat_*.txt` and `txtconcat_*_list.txt` files are excluded from input.
-These directories are also excluded by default, especially when using `-Recurse`:
+These directories are also excluded by default, especially when using `--recurse`:
 
 ```text
 .git
@@ -163,8 +158,8 @@ The concatenated output writes each file as path, delimiter, content, delimiter.
 
 ## Legacy Scripts
 
-The old purpose-specific PowerShell scripts are kept in `legacy/`.
-Use `txtconcat.ps1` for normal use going forward.
+The previous PowerShell 7 implementation remains available as `txtconcat.ps1`.
+Older purpose-specific PowerShell scripts are kept in `legacy/`.
 
 ## Maintainer Setup
 
@@ -181,78 +176,73 @@ blocks accidental local path or username leaks before they are committed.
 
 # txtconcat 日本語版
 
-指定したフォルダ内のテキストファイルを1つのテキストファイルに結合するPowerShellスクリプトです。
-WindowsとmacOSの両方で使えるよう、PowerShell 7 (`pwsh`) 前提にしています。
+指定したフォルダ内のテキストファイルを1つのテキストファイルに結合する、
+macOS向けの小さなshell scriptです。
 
 ## 要件
 
-- PowerShell 7+
-
-macOSではHomebrewでインストールできます。
-
-```sh
-brew install powershell
-```
+- macOS `/bin/sh`
+- macOS標準のコマンドラインツール (`find`, `sort`, `grep`, `cat`, `awk`)
 
 ## 使い方
 
 カレントフォルダの対象ファイルを結合します。
 
 ```sh
-pwsh ./txtconcat.ps1
+./txtconcat.sh
 ```
 
 サブフォルダも含めます。
 
 ```sh
-pwsh ./txtconcat.ps1 -Recurse
+./txtconcat.sh --recurse
 ```
 
 入力フォルダを指定します。
 
 ```sh
-pwsh ./txtconcat.ps1 -SourceDir ./src
+./txtconcat.sh --source-dir ./src
 ```
 
 複数フォルダを指定します。
 
 ```sh
-pwsh ./txtconcat.ps1 -SourceDirs ./src,./docs
+./txtconcat.sh --source-dirs ./src,./docs
 ```
 
 出力先を指定します。
 
 ```sh
-pwsh ./txtconcat.ps1 -OutputDir ./out
+./txtconcat.sh --output-dir ./out
 ```
 
 拡張子を指定します。
 
 ```sh
-pwsh ./txtconcat.ps1 -Extensions .txt,.md,.py
+./txtconcat.sh --extensions .txt,.md,.py
 ```
 
 拡張子ではなく、ファイル内容からテキストファイルを自動判定します。
 
 ```sh
-pwsh ./txtconcat.ps1 -AutoText
+./txtconcat.sh --auto-text
 ```
 
 ## オプション
 
 | Option | Default | Description |
 | --- | --- | --- |
-| `-SourceDir` | current directory | 入力フォルダを1つ指定します。 |
-| `-SourceDirs` | current directory | 入力フォルダを複数指定します。`-SourceDir` とは同時指定できません。 |
-| `-OutputDir` | current directory | 出力先フォルダを指定します。 |
-| `-Recurse` | off | サブフォルダを含めます。 |
-| `-AutoText` | off | 拡張子ではなく内容からテキストファイルを判定します。 |
-| `-Extensions` | 対象ファイルの選び方を参照 | `-AutoText` 未指定時の対象拡張子または完全一致ファイル名です。 |
-| `-ExcludeDirs` | 対象ファイルの選び方を参照 | `-Recurse` 時などに除外するディレクトリ名です。 |
-| `-Delimiter` | `==========` | ファイル境界の区切り文字です。 |
-| `-Prefix` | `txtconcat` | 出力ファイル名の接頭辞です。 |
-| `-ExcludeGeneratedFiles` | `$true` | `txtconcat_*.txt` と `txtconcat_*_list.txt` を入力対象から除外します。 |
-| `-UseHomePlaceholder` | `$true` | ホーム配下のパスを `~` 表記にします。 |
+| `--source-dir` | current directory | 入力フォルダを1つ指定します。 |
+| `--source-dirs` | current directory | 入力フォルダを複数指定します。`--source-dir` とは同時指定できません。 |
+| `--output-dir` | current directory | 出力先フォルダを指定します。 |
+| `--recurse` | off | サブフォルダを含めます。 |
+| `--auto-text` | off | 拡張子ではなく内容からテキストファイルを判定します。 |
+| `--extensions` | 対象ファイルの選び方を参照 | `--auto-text` 未指定時の対象拡張子または完全一致ファイル名です。 |
+| `--exclude-dirs` | 対象ファイルの選び方を参照 | `--recurse` 時などに除外するディレクトリ名です。 |
+| `--delimiter` | `==========` | ファイル境界の区切り文字です。 |
+| `--prefix` | `txtconcat` | 出力ファイル名の接頭辞です。 |
+| `--include-generated-files` | off | 通常は除外される生成済み出力ファイルを入力対象に含めます。 |
+| `--no-home-placeholder` | off | ホーム配下のパスを `~` に置換せず、絶対パスのまま出力します。 |
 
 ## 対象ファイルの選び方
 
@@ -295,9 +285,9 @@ pwsh ./txtconcat.ps1 -AutoText
 ```
 
 既定の対象は、ソースコード、設定、ドキュメント、ログを広めに拾う方針です。
-拡張子に関係なくテキストらしいファイルを拾いたい場合は `-AutoText` を使います。
+拡張子に関係なくテキストらしいファイルを拾いたい場合は `--auto-text` を使います。
 
-`-AutoText` を指定した場合は、拡張子ではなくファイル内容からテキストファイルかどうかを判定します。
+`--auto-text` を指定した場合は、拡張子ではなくファイル内容からテキストファイルかどうかを判定します。
 先頭最大8192バイトを読み、次の条件で判定します。
 
 - 空ファイルはテキスト扱い
@@ -306,7 +296,7 @@ pwsh ./txtconcat.ps1 -AutoText
 - 制御文字の割合が30%未満ならテキスト扱い
 
 既定では、生成済みの `txtconcat_*.txt` と `txtconcat_*_list.txt` は入力対象から除外します。
-また、`-Recurse` 時などは次のディレクトリを既定で除外します。
+また、`--recurse` 時などは次のディレクトリを既定で除外します。
 
 ```text
 .git
@@ -344,8 +334,8 @@ coverage
 
 ## 旧スクリプト
 
+PowerShell 7版は `txtconcat.ps1` として残しています。
 移行前の用途別PowerShellスクリプトは `legacy/` に残しています。
-今後は原則として `txtconcat.ps1` を使います。
 
 ## メンテナ向けセットアップ
 
