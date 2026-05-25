@@ -1,0 +1,7 @@
+#!/bin/sh
+set -eu
+
+USER_NAME="${USER_NAME:-${USER:-}}"
+export USER_NAME
+
+python3 scripts/check_user_name_leak.py

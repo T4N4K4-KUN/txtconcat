@@ -166,6 +166,17 @@ The concatenated output writes each file as path, delimiter, content, delimiter.
 The old purpose-specific PowerShell scripts are kept in `legacy/`.
 Use `txtconcat.ps1` for normal use going forward.
 
+## Maintainer Setup
+
+Maintainers can enable the repository git hook checks with:
+
+```sh
+python3 scripts/install_git_hooks.py
+```
+
+The pre-commit hook checks staged text files for the local `USER_NAME` value and
+blocks accidental local path or username leaks before they are committed.
+
 ---
 
 # txtconcat 日本語版
@@ -335,3 +346,14 @@ coverage
 
 移行前の用途別PowerShellスクリプトは `legacy/` に残しています。
 今後は原則として `txtconcat.ps1` を使います。
+
+## メンテナ向けセットアップ
+
+メンテナは次のコマンドでリポジトリの git hook チェックを有効化できます。
+
+```sh
+python3 scripts/install_git_hooks.py
+```
+
+pre-commit hook は staged text files にローカルの `USER_NAME` 値が含まれていないかを確認し、
+ローカルパスやユーザー名の混入を commit 前に止めます。

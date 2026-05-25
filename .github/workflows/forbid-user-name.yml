@@ -3,8 +3,6 @@ name: Forbid USER_NAME in Text Files
 on:
   pull_request:
   push:
-    branches:
-      - main
 
 jobs:
   check-user-name-secret:
