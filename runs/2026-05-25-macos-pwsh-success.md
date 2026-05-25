@@ -6,11 +6,13 @@
 
 ## Environment
 
-- OS: macOS 26.5 (Build 25F71)
-- Architecture: arm64
-- PowerShell: 7.6.2
-- Install method: Homebrew (`brew install powershell`)
+- Platform: macOS
+- PowerShell: 7.6.x
+- Install method: Homebrew
 - Repository branch: `record/mac-pwsh-success-run`
+
+Only the minimum environment details needed to understand the run are recorded.
+The exact OS build and local machine details are intentionally omitted.
 
 ## Command
 
